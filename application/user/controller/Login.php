@@ -1,6 +1,6 @@
 <?php
 namespace app\user\controller;
-use app\index\model\Users;
+use app\user\model\Users;
 use base\Base;
 use think\Cache;
 use think\Session;
@@ -35,5 +35,4 @@ class login extends Base{
         Session::push('user',$owner);
         return $this->returnJson('登陆成功',1001,true);
     }
-
 }
