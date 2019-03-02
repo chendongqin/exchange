@@ -29,26 +29,26 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form class="form-horizontal">
-              <h1>登录</h1>
+            <form>
+              <h1>用户注册</h1>
               <div>
-                <input type="text" class="form-control" placeholder="用户名" id="username">
+                <input type="email" class="form-control" placeholder="邮箱" required="" id="email"/>
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="密码" id="password">
+                <input type="password" class="form-control" placeholder="密码" required="" id="password"/>
               </div>
-              <div style="margin-bottom: 10px;">
-                <input type="text" class="form-control" placeholder="验证码" id="password" style="width: 226px;display: inline-block;vertical-align: middle;margin: 0;">
-                <a style="vertical-align: middle;display: inline-block;height: 34px;margin: 0;"><img src="/index/captcha/?channel=userLogin"></a>
+              <div>
+                <input type="password" class="form-control" placeholder="确认密码" required="" id="sure"/>
               </div>
+              <div>
+                <a class="btn btn-default submit" id="register">注册</a>
+              </div>
+
               <div class="clearfix"></div>
-              <div>
-                <a class="btn btn-default" id="login">登录</a>
-              </div>
-              <div class="clearfix"></div>
+
               <div class="separator">
-                <p class="change_link">没有帐号 ?
-                  <a href="/user/regist" class="to_register">前往注册</a>
+                <p class="change_link">已有帐号 ?
+                  <a href="/user/login" class="to_register" id="register">前往登录</a>
                 </p>
                 <div class="clearfix"></div>
                 <br />
@@ -60,15 +60,15 @@
     </div>
     <script type="text/javascript">
       $(function(){
-        // 登录
-        $('#login').click(function() {
+        // 注册
+        $('#register').click(function() {
           var params = {
-            username: $('#username').val(),
+            email: $('#email').val(),
             password: $('#password').val(),
-            isremember: $('#isremember').prop("checked") ? 1 : 0
+            sure: $('#sure').val()
           }
           //登陆
-          $.get('/user/login/i', params, function(data){
+          $.get('/user/regist/i', params, function(data){
             if (data.status === true) {
               window.location.href = '/'
             } else {
