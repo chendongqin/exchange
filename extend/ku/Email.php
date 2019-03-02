@@ -22,9 +22,11 @@ class Email{
      */
     public static function sendEmail($email,$subject,$body){
         //实例化
-        $emailConfig = Config::get('basketball.email');
         $mail=new PHPMailer(true);
         try{
+            $myEmail = '616955718@qq.com';
+            $password = 'optqqcmfwjywbbfb';
+            $myName = '用品置换系统';
             //邮件调试模式
 //            $mail->SMTPDebug = 2;
             //设置邮件使用SMTP
@@ -36,20 +38,20 @@ class Email{
             // 启用SMTP验证
             $mail->SMTPAuth = true;
             // SMTP username
-            $mail->Username = $emailConfig['email'];
+            $mail->Username = $myEmail;
             // SMTP password
-            $mail->Password = $emailConfig['password'];
+            $mail->Password = $password;
             // 启用TLS加密，`ssl`也被接受
             //            $mail->SMTPSecure = 'tls';
             // 连接的TCP端口
             //            $mail->Port = 587;
             //设置发件人
-            $mail->setFrom($emailConfig['email'], $emailConfig['name']);
+            $mail->setFrom($myEmail, $myName);
             //  添加收件人1
             $mail->addAddress($email, 'dear');     // Add a recipient
             //            $mail->addAddress('ellen@example.com');               // Name is optional
             //            收件人回复的邮箱
-            $mail->addReplyTo($emailConfig['email'], $emailConfig['name']);
+            $mail->addReplyTo($myEmail, $myName);
             //            抄送
             //            $mail->addCC('cc@example.com');
             //            $mail->addBCC('bcc@example.com');

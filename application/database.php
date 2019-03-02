@@ -14,7 +14,7 @@ return [
     'type'            => 'mysql',
    'hostname'        => '120.77.223.100',
     // 数据库名
-    'database'        => 'g_exchangeg',
+    'database'        => 'g_exchange',
     // 用户名
    'username'        => 'root',
     // 密码

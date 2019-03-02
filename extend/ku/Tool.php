@@ -1,6 +1,7 @@
 <?php
 
 namespace ku;
+use think\Cache;
 use \think\Session;
 /**
  * 一些可能用到的小函数
@@ -415,7 +416,7 @@ class Tool {
             $code .= $text;
             imagettftext($image,$size,$angle,$x,$y,$randColor,$fontFile,$text);
         }
-        $session = new Session();
+        $session = new Cache();
         $session->set($channel.'_virefy_code',$code);
         header("Content-Type: image/png");
         imagepng($image);
