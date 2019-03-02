@@ -399,25 +399,41 @@ class Tool {
     }
 
 
-    public static function captcha($length,$width,$height,$channel){
+    public static function captcha($width,$height,$channel){
         $image = imagecreatetruecolor($width,$height);
         $white = imagecolorallocate($image,255,255,255);
         imagefilledrectangle($image,0,0,$width,$height,$white);
-        $string = join('',array_merge(range(0,9),range('a','z'),range('A','Z')));
         $y = $height/2;
-        $code = '';
+        $string = array('+','-');
+        $suan = '+';
+        $num =[];
         $fontFile = PUBLIC_PATH.'/static/font/AntykwaBold.ttf';
-        for($i=0;$i<$length;$i++){
+        $angle = 0;
+        for($i=0;$i<3;$i++){
             $randColor = imagecolorallocate($image,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));
             $size = mt_rand(12,18);
-            $angle = mt_rand(-20,20);
             $x = 5+20*$i;
-            $text = str_shuffle($string)[0];
-            $code .= $text;
+            if($i == 1){
+                $k = mt_rand(0,1);
+                $text = $string[$k];
+                $suan = $text;
+            }else{
+                if($suan == '-'){
+                    $text = mt_rand(1,$num[0]);
+                }else{
+                    $text = mt_rand(1,99);
+                }
+                $num[] = $text;
+            }
             imagettftext($image,$size,$angle,$x,$y,$randColor,$fontFile,$text);
         }
+        if($suan == '+'){
+            $res = $num[0] + $num[1];
+        }else{
+            $res = $num[0] - $num[1];
+        }
         $session = new Cache();
-        $session->set($channel.'_virefy_code',$code);
+        $session->set($channel.'_virefy_code',$res);
         header("Content-Type: image/png");
         imagepng($image);
         imagedestroy($image);
