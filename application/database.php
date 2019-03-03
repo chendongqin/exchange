@@ -12,7 +12,7 @@
 return [
     // 数据库类型
     'type'            => 'mysql',
-   'hostname'        => '120.77.223.100',
+   'hostname'        => '127.0.0.1',
     // 数据库名
     'database'        => 'g_exchange',
     // 用户名
