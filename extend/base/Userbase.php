@@ -21,8 +21,7 @@ class Userbase extends Base {
         //$this->isFilter()判断该访问方法是否为过滤访问方法
         if($this->isFilter()===false){
             if(empty($user)){
-                return $this->returnJson('未登录',9000,false,array('url'=>'/user/login'));
-                die();
+                return $this->redirect('/user/login');
             }
         }
         $this->assign('user',$user);

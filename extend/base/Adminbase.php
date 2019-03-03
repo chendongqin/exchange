@@ -21,8 +21,7 @@ class Adminbase extends Base{
         $admin = isset($admin[0])?$admin[0]:null;
         if($this->isFilter()===false){
             if(empty($admin)){
-                return $this->returnJson('未登录',9000,false,array('url'=>'/admin/login'));
-                die();
+                return $this->redirect('/admin/login');
             }
         }
         $this->assign('admin',$admin);
