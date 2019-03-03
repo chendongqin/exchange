@@ -432,7 +432,7 @@ class Tool {
         }else{
             $res = $num[0] - $num[1];
         }
-        $session = new Cache();
+        $session = new Session();
         $session->set($channel.'_virefy_code',$res);
         header("Content-Type: image/png");
         imagepng($image);

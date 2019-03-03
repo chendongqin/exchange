@@ -32,13 +32,13 @@
             <form class="form-horizontal">
               <h1>登录</h1>
               <div>
-                <input type="text" class="form-control" placeholder="用户名" id="username">
+                <input type="text" class="form-control" placeholder="用户名" id="userName">
               </div>
               <div>
                 <input type="password" class="form-control" placeholder="密码" id="password">
               </div>
               <div style="margin-bottom: 10px;">
-                <input type="text" class="form-control" placeholder="验证码" id="password" style="width: 226px;display: inline-block;vertical-align: middle;margin: 0;">
+                <input type="text" class="form-control" placeholder="验证码" id="code" style="width: 226px;display: inline-block;vertical-align: middle;margin: 0;">
                 <a style="vertical-align: middle;display: inline-block;height: 34px;margin: 0;"><img src="/index/captcha/?channel=userLogin"></a>
               </div>
               <div class="clearfix"></div>
@@ -63,9 +63,9 @@
         // 登录
         $('#login').click(function() {
           var params = {
-            username: $('#username').val(),
+            userName: $('#userName').val(),
             password: $('#password').val(),
-            isremember: $('#isremember').prop("checked") ? 1 : 0
+            code: $('#code').val(),
           }
           //登陆
           $.get('/user/login/i', params, function(data){

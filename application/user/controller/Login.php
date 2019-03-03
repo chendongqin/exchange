@@ -20,7 +20,7 @@ class login extends Base{
         $username = $this->getParam('userName','');
         $password = $this->getParam('password','');
         $code = $this->getParam('code','');
-        $loginCode = Cache::get('userLogin'.$username);
+        $loginCode = Session::get('userLogin_virefy_code');
         if($loginCode != $code){
             return $this->returnJson('验证码不正确',1000);
         }
