@@ -35,15 +35,15 @@
               <div>
                 <input type="email" class="form-control" placeholder="邮箱" required="" id="email"/>
               </div>
+              <div style="margin-bottom: 10px;">
+                <input type="text" class="form-control" placeholder="验证码" id="code" style="width: 226px;display: inline-block;vertical-align: middle;margin: 0;">
+                <a style="vertical-align: middle;display: inline-block;height: 34px;margin: 0;width: 120px;line-height: 34px;color: #42ade6;cursor: pointer;" id="sendCode">获取邮箱验证码</a>
+              </div>
               <div>
                 <input type="password" class="form-control" placeholder="密码" required="" id="password"/>
               </div>
               <div>
                 <input type="password" class="form-control" placeholder="确认密码" required="" id="sure"/>
-              </div>
-              <div style="margin-bottom: 10px;">
-                <input type="text" class="form-control" placeholder="验证码" id="password" style="width: 226px;display: inline-block;vertical-align: middle;margin: 0;">
-                <a style="vertical-align: middle;display: inline-block;height: 34px;margin: 0;width: 120px;line-height: 34px;color: #42ade6;cursor: pointer;" id="sendCode">获取邮箱验证码</a>
               </div>
               <div>
                 <a class="btn btn-default submit" id="register">注册</a>
@@ -72,23 +72,30 @@
           var params = {
             email: $('#email').val(),
             password: $('#password').val(),
-            sure: $('#sure').val()
+            sure: $('#sure').val(),
+            code: $('#code').val()
           }
           //登陆
           $.get('/user/regist/i', params, function(data){
             if (data.status === true) {
-              window.location.href = '/'
+              window.location.href = '/';
             } else {
-              alert(data.msg)
+              alert(data.msg);
             }
           })
         })
         // 获取邮箱验证码
         $('#sendCode').click(function() {
           if (showBtn) {
-            setCookie('email', 60, 60 * 1000)
-            showBtn = false
-            countTime('email', 'sendCode')
+            $.post('/index/email/regist', {email: $('#email').val()}, function(res) {
+              if (res.status == true) {
+                setCookie('email', 60, 60 * 1000)
+                  showBtn = false
+                  countTime('email', 'sendCode')
+              } else {
+                alert(res.msg);
+              }
+            })
           }
         });
 
