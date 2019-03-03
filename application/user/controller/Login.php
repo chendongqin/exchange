@@ -8,7 +8,7 @@ use think\Session;
 class login extends Base{
 
     public function index(){
-         $owner = Session::get('user');
+        $owner = Session::get('user');
         $owner = isset($owner[0])?$owner[0]:$owner;
         if(!empty($owner)){
            return $this->redirect('/user');
