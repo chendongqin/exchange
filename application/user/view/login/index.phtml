@@ -70,7 +70,7 @@
           //登陆
           $.get('/user/login/i', params, function(data){
             if (data.status === true) {
-              window.location.href = '/'
+              window.location.href = '/user'
             } else {
               alert(data.msg)
             }
