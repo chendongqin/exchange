@@ -130,4 +130,45 @@ class Manage extends Adminbase
         return $this->returnJson('失败');
     }
 
+    public function userlist(){
+        $isEffect = $this->getParam('isEffect',0,'int');
+        $name = $this->getParam('name','','string');
+        $pageLimit = $this->getParam('pageLimit',15,'int');
+        $page = $this->getParam('page','','int');
+        $where = array('isdel'=>0 ,'is_effect'=>$isEffect);
+        if($name){
+            $where['nick_name'] = array('like',$name.'%');
+        }
+        $pager = Db::name('users')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
+        $this->assign('pager',$pager);
+        $this->assign('pageLimit',$pageLimit);
+        $this->assign('page',$page);
+        return $this->fetch();
+    }
+
+    //审核用户
+    public function auidtuser(){
+        $userId = $this->getParam('userId',0,'int');
+        $user = Db::name('users')->where(array('id'=>$userId,'isdel'=>0))->find();
+        $user['is_effect'] = 1;
+        $res = Db::name('users')->update($user);
+        if($res){
+            return $this->returnJson('成功',1001,true);
+        }
+        return $this->returnJson('失败');
+    }
+
+    //删除|冻结用户
+    public function deluser(){
+        $userId = $this->getParam('userId',0,'int');
+        $user = Db::name('users')->where(array('id'=>$userId,'isdel'=>0))->find();
+        $user['isdel'] = 1;
+        $res = Db::name('users')->update($user);
+        if($res){
+            return $this->returnJson('成功',1001,true);
+        }
+        return $this->returnJson('失败');
+    }
+
+
 }

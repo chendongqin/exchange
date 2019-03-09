@@ -14,8 +14,8 @@ class Msg extends Adminbase
         if($name){
             $where['title'] = array('like','%'.$name.'%');
         }
-        $admins = Db::name('system_msg')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
-        $this->assign('pager',$admins);
+        $pager = Db::name('system_msg')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
+        $this->assign('pager',$pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();
