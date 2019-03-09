@@ -1,0 +1,133 @@
+<?php
+namespace app\admin\controller;
+use base\Adminbase;
+use think\Db;
+use think\Session;
+class Manage extends Adminbase
+{
+
+    public function index()
+    {
+        //置换请求数量
+        $goodsWaitNum = Db::name('goods')->where(array('status'=>0))->count();
+        $goodsIssueNum = Db::name('goods')->where(array('status'=>1))->count();
+        //置换匹配请求数量
+        $requestWaitNum = Db::name('request')->where(array('status'=>0))->count();
+        $requestSuccessNum = Db::name('request')->where(array('status'=>1))->count();
+        $requestfailNum = Db::name('request')->where(array('status'=>2))->count();
+        //置换匹配成功数量
+        $success = Db::name('order')->where(array('status'=>1))->count();
+        //取消失败数量
+        $fail = Db::name('order')->where(array('status'=>2))->count();
+        //用户总数
+        //男
+        $man = Db::name('user')->where(array('isdel'=>0,'sex'=>0))->count();
+        $nv = Db::name('user')->where(array('isdel'=>0,'sex'=>1))->count();
+        $this->assign('goodsWaitNum',$goodsWaitNum);
+        $this->assign('goodsIssueNum',$goodsIssueNum);
+        $this->assign('requestWaitNum',$requestWaitNum);
+        $this->assign('requestSuccessNum',$requestSuccessNum);
+        $this->assign('requestfailNum',$requestfailNum);
+        $this->assign('success',$success);
+        $this->assign('fail',$fail);
+        $this->assign('man',$man);
+        $this->assign('nv',$nv);
+        return $this->fetch();
+
+    }
+
+    /**
+     * 置换请求列表
+     * @return mixed
+     * @throws \think\exception\DbException
+     */
+    public function goods()
+    {
+        $name = $this->getParam('name','','string');
+        $pageLimit = $this->getParam('pageLimit','','int');
+        $page = $this->getParam('page','','int');
+        $status = $this->getParam('status',1,'int');
+        $where = ['status'=>$status ,'isdel'=>0];
+        if($name){
+            $where['name'] = array('like',$name.'%');
+        }
+        $goods = Db::name('goods')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
+        $this->assign('pager',$goods);
+        $this->assign('pageLimit',$pageLimit);
+        $this->assign('page',$page);
+        return $this->fetch();
+    }
+
+    /**
+     * 下线置换请求
+     * @param $id
+     * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function downgoods($id)
+    {
+        $where =array('id'=>$id,'status'=>1 ,'isdel'=>0);
+        $goods = Db::name('goods')->where($where)->find();
+        if(empty($goods)){
+            return $this->returnJson('置换请求不存在或不在发布状态');
+        }
+        $goods['isdel'] = 1;
+        $res = Db::name('goods')->update($goods);
+        if($res){
+            return $this->returnJson('成功',1001,true);
+        }
+        return $this->returnJson('失败');
+    }
+
+    public function report(){
+        $type = $this->getParam('type',100,'int');
+        $userId = $this->getParam('userId',0,'int');
+        $pageLimit = $this->getParam('pageLimit',15,'int');
+        $isdeal = $this->getParam('isDeal',1,'int');
+        $page = $this->getParam('page',0,'int');
+        $reportUserId = $this->getParam('reportuserId',0,'int');
+        $where = ['is_deal'=> $isdeal] ;
+        if($userId){
+            $where['user_id'] = $userId;
+        }
+        if($reportUserId){
+            $where['report_user_id'] = $reportUserId;
+        }
+        if($type !=100){
+            $where['type'] = $type;
+        }
+        $pager = Db::name('report')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
+        $this->assign('pager',$pager);
+        $this->assign('pageLimit',$pageLimit);
+        $this->assign('page',$page);
+        return $this->fetch();
+    }
+
+    /**
+     * 更新已处理举报
+     * @param $id
+     * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function dealreport($id){
+        $report = Db::name('report')->where(array('id'=>$id,'is_deal'=>0))->find();
+        if(!$report){
+            return $this->returnJson('没有举报需要处理');
+        }
+        $report['is_deal'] = 1;
+        $res = Db::name('report')->update($report);
+        if($res){
+            return $this->returnJson('成功',1001,true);
+        }
+        return $this->returnJson('失败');
+    }
+
+}
