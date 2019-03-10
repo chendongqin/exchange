@@ -19,34 +19,40 @@ use think\Db;
       * @throws \think\exception\DbException
       */
      public function index(){
-         $priceType = $this->getParam('priceType',0,'int');
-         $this->assign('priceType',$priceType);
-         $where = array('status'=>1,'priceType'=>$priceType);
-         $roomType = $this->getParam('roomType',0,'int');
-         if($roomType){
-             $where['roomType'] = $roomType;
-         }
-         $this->assign('roomType',$roomType);
-         $price = $this->getParam('price',0,'string');
-         if($price){
-             $where['price'] = $price;
-         }
-         $this->assign('$price',$price);
-         $address = $this->getParam('address','','string');
-         if ($address){
-             $hourses = Db::name('house')->where('address', 'like', $address)->field('id')->select();
-             if(empty($hourses)){
-                 $where[] = '1=2';
-             }else{
-                 $where[] = 'houseId in('.implode(',',$hourses).')';
-             }
-         }
-         $this->assign('address',$address);
+         $pageLimit = $this->getParam('pageLimit',10,'int');
          $page = $this->getParam('page',1,'int');
-         $pageLimit = $this->getParam('pageLimit',8,'int');
-         $pager  = Db::name('rooms')->where($where)->page($page,$pageLimit);
+         $name = $this->getParam('name');
+         $wantToGoods = $this->getParam('wantToGoodsName');
+         $where = array('status'=>1);
+         if($name)
+             $where['name'] = array('like',$name.'%');
+         if($wantToGoods)
+             $where['want_to_goods'] = array('like',$wantToGoods.'%');
+         $pager = Db::name('goods')->where($where)
+             ->paginate($pageLimit,false,array('page'=>$page))
+             ->toArray();
+         $data = [];
+         foreach ($pager['data'] as $key=>$item){
+             $data[$key] = $item;
+             $user = Db::name('users')->where('id',$item['user_id'])->find();
+             $data['userName'] = empty($user['nick_name'])?$user['email']:$user['nick_name'];
+         }
+         $pager['data'] = $data;
          $this->assign('pager',$pager);
+         $this->assign('pageLimit',$pageLimit);
+         $this->assign('page',$page);
          return $this->fetch();
+     }
+
+     //获取系统公告
+     public function sysmsg(){
+         $pageLimit = $this->getParam('pageLimit',10,'int');
+         $page = $this->getParam('page',1,'int');
+         $pager = Db::name('system_msg')->order(array('weight'=>'desc','id'=>'desc'))
+             ->paginate($pageLimit,false,array('page'=>$page))
+             ->toArray();
+         $data = $pager['data'];
+         return $this->returnJson('成功',1001,true,$data);
      }
 
 
