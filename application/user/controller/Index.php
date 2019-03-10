@@ -140,4 +140,21 @@ use think\Db;
          return $this->returnJson('成功',1001,true);
      }
 
+     /**
+      * 获取地址
+      * @return \think\response\Json
+      * @throws \think\db\exception\DataNotFoundException
+      * @throws \think\db\exception\ModelNotFoundException
+      * @throws \think\exception\DbException
+      */
+     public function getAddress(){
+         $user = Session::get('user');
+         $user = isset($user[0])?$user[0]:$user;
+         $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
+         if(!$address){
+             return $this->returnJson('您没有设置地址');
+         }
+         return $this->returnJson('成功',1001,true,$address);
+     }
+
  }
