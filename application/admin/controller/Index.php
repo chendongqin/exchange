@@ -9,7 +9,7 @@ class Index extends Adminbase
     {
         $name = $this->getParam('name','','string');
         $pageLimit = $this->getParam('pageLimit',15,'int');
-        $page = $this->getParam('page','','int');
+        $page = $this->getParam('page',1,'int');
         $where = [];
         if($name){
             $where['login_name|admin_name'] = array('like','%'.$name.'%');
