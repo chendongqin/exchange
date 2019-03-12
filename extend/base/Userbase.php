@@ -7,6 +7,7 @@
  */
 namespace base;
 use think\Session;
+use think\Db;
 class Userbase extends Base {
     protected $_ec = array(
 //        'user'=>array( 'index'),
