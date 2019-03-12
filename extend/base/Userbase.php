@@ -24,6 +24,7 @@ class Userbase extends Base {
                 return $this->redirect('/user/login');
             }
         }
+        $user = Db::name('users')->where('id',$user['id'])->find();
         $this->assign('user',$user);
         Session::delete('user');
         Session::push('user',$user);
