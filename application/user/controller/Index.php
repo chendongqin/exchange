@@ -121,7 +121,7 @@ use think\Db;
         $myaddress['address']=$address;
         $myaddress['addressee']=$addressee;
         $res = Db::name('user_address')->update($myaddress);
-        if($res)
+        if($res) 
             return $this->returnJson('成功',1001,true);
         return $this->returnJson('失败');
      }
