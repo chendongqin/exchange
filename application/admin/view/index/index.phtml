@@ -1,15 +1,120 @@
 {include file="../application/index/view/public/header.phtml" /}
-  {include file="../application/index/view/public/user-side.phtml" /}
-    {include file="../application/index/view/public/nav.phtml" /}
+  {include file="../application/index/view/public/admin-side.phtml" /}
+    {include file="../application/index/view/public/admin-nav.phtml" /}
     <div class="right_col" role="main">
       <div class="">
         <div class="row x_title">
           <div class="col-md-12">
-            <h3>首页</h3>
+            <h3>管理员列表</h3>
+          </div>
+        </div>
+
+        <div class="x_content">
+          <div class="text-muted font-13 m-b-30">
+            <div class="dataTables_wrapper dt-bootstrap no-footer">
+              <div class="row">
+                <div class="col-sm-10 col-md-10">
+                  <button class="btn btn-primary btn-sm" id="showAddAdminModal">添加管理员</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
+                      <tr>
+                        <th>管理员姓名</th>
+                        <th>登录密码(加密)</th>
+                        <th>上次登录时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php if(!empty($pager['data'])):?>
+                        <?php foreach ($pager['data'] as $key=>$data):?>
+                          <tr role="row">
+                            <td><?php echo $data['admin_name'];?></td>
+                            <td><?php echo $data['password'];?></td>
+                            <td><?php echo $data['login_time'];?></td>
+                            <td>
+                              <button class="btn btn-danger btn-sm delete" data-id="<?php echo $data['id'];?>">删除</button>
+                            </td>
+                          </tr>
+                        <?php endforeach;?>
+                      <?php else:?>
+                        <td colspan="4" style="text-align: center;">暂无信息</td>
+                      <?php endif;?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+
+    <div class="modal fade bs-example-modal-md" id="addAdminModal">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">添加管理员</h4>
+          </div>
+          <div class="modal-body open-user-modal">
+            <form class="form-horizontal form-label-left" id="addAdminForm">
+              <div class="form-group">
+                <label class="control-label col-sm-3">管理员姓名</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input name="name" type="text" class="form-control" placeholder="请输入管理员姓名">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-3">登录密码</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input name="password" type="password" class="form-control" placeholder="请输入登录密码">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="addAdmin">添加</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        // 添加管理员
+        $('#showAddAdminModal').click(() => {
+          $('#addAdminModal').modal('show');
+        });
+        $('#addAdmin').click(() => {
+          const params = $('#addAdminForm').serializeArray();
+          $.post('/admin/index/add', params, (res) => {
+            if (res.status === true) {
+              location.reload();
+            } else {
+              alert(res.msg);
+            }
+          });
+        });
+        // 删除管理员
+        $('.delete').click(function() {
+          if (confirm('确定删除该管理员？')) {
+            const params = {
+              id: $(this).attr('data-id')
+            }
+            $.post('/admin/index/delete', params, (res) => {
+              if (res.status === true) {
+                location.reload();
+              } else {
+                alert(res.msg);
+              }
+            })
+          }
+        });
+      })();
+    </script>
 {include file="../application/index/view/public/footer.phtml" /}

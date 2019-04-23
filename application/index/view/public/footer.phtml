@@ -1,33 +1,74 @@
+        <div class="modal fade bs-example-modal-sm" id="editPwdModal">
+          <div class="modal-dialog modal-md">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">修改密码</h4>
+              </div>
+              <div class="modal-body">
+                <form class="form-horizontal form-label-left" id="editPwdForm">
+                  <div class="form-group">
+                    <label class="control-label col-sm-3">原密码</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input name="pwd" type="password" class="form-control" placeholder="请输入原密码">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3">新密码</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input name="newpwd" type="password" class="form-control" placeholder="请输入新密码">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3">确认新密码</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      <input name="sure" type="password" class="form-control" placeholder="请确认新密码">
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="editPwd">修改密码</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- jQuery -->
-    
-    <!-- Bootstrap -->
+    <script>
+      // 修改登录密码
+      $('#showEditPwdModal').click(() => {
+        $('#editPwdModal').modal('show');
+      });
+      $('#editPwd').click(() => {
+        const params = $('#editPwdForm').serializeArray();
+        $.post('/' + $('#showEditPwdModal').attr('data-type') + '/index/changepw', params, (res) => {
+          if (res.status === true) {
+            location.reload();
+          } else {
+            alert(res.msg);
+          }
+        });
+      });
+    </script>
     <script src="/assets/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- FastClick -->
     <script src="/assets/plugins/fastclick/lib/fastclick.js"></script>
-    <!-- NProgress -->
     <script src="/assets/plugins/nprogress/nprogress.js"></script>
-    <!-- Chart.js -->
     <script src="/assets/plugins/Chart.js/dist/Chart.min.js"></script>
-    <!-- jQuery Sparklines -->
     <script src="/assets/plugins/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-    <!-- Flot -->
     <script src="/assets/plugins/Flot/jquery.flot.js"></script>
     <script src="/assets/plugins/Flot/jquery.flot.pie.js"></script>
     <script src="/assets/plugins/Flot/jquery.flot.time.js"></script>
     <script src="/assets/plugins/Flot/jquery.flot.stack.js"></script>
     <script src="/assets/plugins/Flot/jquery.flot.resize.js"></script>
-    <!-- Flot plugins -->
     <script src="/assets/plugins/flot.orderbars/js/jquery.flot.orderBars.js"></script>
     <script src="/assets/plugins/flot-spline/js/jquery.flot.spline.min.js"></script>
     <script src="/assets/plugins/flot.curvedlines/curvedLines.js"></script>
-    <!-- DateJS -->
     <script src="/assets/plugins/DateJS/build/date.js"></script>
-    <!-- bootstrap-daterangepicker -->
     <script src="/assets/plugins/moment/min/moment.min.js"></script>
     <script src="/assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
-    
-    <!-- Custom Theme Scripts -->
     <script src="/assets/plugins/build/custom.min.js"></script>
   </body>
 </html>

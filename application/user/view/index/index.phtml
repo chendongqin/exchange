@@ -1,15 +1,124 @@
 {include file="../application/index/view/public/header.phtml" /}
   {include file="../application/index/view/public/user-side.phtml" /}
-    {include file="../application/index/view/public/nav.phtml" /}
+    {include file="../application/index/view/public/user-nav.phtml" /}
     <div class="right_col" role="main">
       <div class="">
         <div class="row x_title">
           <div class="col-md-12">
-            <h3>首页</h3>
+            <h3>个人中心</h3>
+          </div>
+        </div>
+
+        <div class="x_content">
+          <div class="text-muted font-13 m-b-30">
+            <div class="dataTables_wrapper dt-bootstrap no-footer">
+              <div class="row">
+                <div class="col-sm-12">
+                  <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
+                      <tr>
+                        <th>帐号</th>
+                        <th>昵称</th>
+                        <th>性别</th>
+                        <th>所在学校</th>
+                        <th>专业</th>
+                        <th>信誉度</th>
+                        <th>审核状态</th>
+                        <th>冻结状态</th>
+                        <th>注册时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr role="row">
+                        <td><?php echo $user['email'];?></td>
+                        <td><?php echo $user['nick_name'];?></td>
+                        <td><?php echo $user['sex'] == 0 ? '男' : '女';?></td>
+                        <td><?php echo $user['shoole'];?></td>
+                        <td><?php echo $user['major'];?></td>
+                        <td><?php echo $user['credit'];?></td>
+                        <td><?php echo $user['is_effect'] == 0 ? '未审核' : '已审核';?></td>
+                        <td><?php echo $user['isdel'] == 0 ? '正常' : '冻结';?></td>
+                        <td><?php echo $user['create_time'];?></td>
+                        <td>
+                          <button class="btn btn-info btn-sm showEditModal">修改基本信息</button>
+                          <a class="btn btn-info btn-sm" href="/user/index/addressList">地址管理</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+
+    <div class="modal fade bs-example-modal-md" id="editUserBasicModal">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">修改基本信息</h4>
+          </div>
+          <div class="modal-body open-user-modal">
+            <form class="form-horizontal form-label-left" id="editUserBasicForm">
+              <div class="form-group">
+                <label class="control-label col-sm-3" for="nickName">用户昵称</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input name="nickName" type="text" class="form-control" placeholder="请输入用户昵称" value="<?php echo $user['nick_name'];?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-3" for="shoole">学校</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input name="shoole" type="text" class="form-control" placeholder="请输入学校" value="<?php echo $user['shoole'];?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-3" for="major">专业</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input name="major" type="text" class="form-control" placeholder="请输入专业" value="<?php echo $user['major'];?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="sex" class="col-sm-3 control-label">性别</label>
+                <div class="col-sm-9">
+                    <label class="radio-inline">
+                      <input type="radio" name="sex" value="0" <?php echo ($user['sex'] == 0 ? 'checked' : '') ;?>>男
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="sex" value="1" <?php echo ($user['sex'] == 1 ? 'checked' : '') ;?>>女
+                    </label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="editUserBasic">添加</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        // 设置基本信息
+        $('.showEditModal').click(() => {
+          $('#editUserBasicModal').modal('show');
+        });
+        $('#editUserBasic').click(() => {
+          const params = $('#editUserBasicForm').serializeArray();
+          $.post('/user/index/set', params, (res) => {
+            if (res.status === true) {
+              location.reload();
+            } else {
+              alert(res.msg);
+            }
+          })
+        });
+      })();
+    </script>
 {include file="../application/index/view/public/footer.phtml" /}

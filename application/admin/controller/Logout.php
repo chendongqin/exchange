@@ -14,6 +14,6 @@ class Logout extends Adminbase{
     public function index(){
         $session = new Session();
         $session->delete('admin_user');
-        return $this->returnJson('退出成功',1001,true);
+        return $this->redirect('/admin/login');
     }
 }

@@ -22,7 +22,7 @@ use think\Db;
         $status = $this->getParam('status',100,'int');
         $pageLimit = $this->getParam('pageLimit',10,'int');
         $page = $this->getParam('page',1,'int');
-        $where = array('isdel'=>0,'user_id'=>$user['id']);
+        $where = array('user_id'=>$user['id']);
         if($name){
             $where['change_goods_name'] = array('like',$name.'%');
         }
@@ -40,6 +40,7 @@ use think\Db;
         }
         $pager['data'] = $data;
         $this->assign('pager',$pager);
+        var_dump($pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();

@@ -53,6 +53,7 @@ class Manage extends Adminbase
         }
         $goods = Db::name('goods')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
         $this->assign('pager',$goods);
+        var_dump($goods);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();

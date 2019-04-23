@@ -31,7 +31,7 @@ class Login extends Base{
             return $this->returnJson('密码错误',1000);
         }
         Session::push('admin_user',$admin);
-        $admin['login_at'] = date('Y-m-d H:i:s');
+        $admin['login_time'] = date('Y-m-d H:i:s');
         Db::name('admin')->update($admin);
         return $this->returnJson('登陆成功',1001,true);
     }

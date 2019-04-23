@@ -19,6 +19,7 @@ use think\Db;
         $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
         $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->select();
+        $this->assign('user',$user);
         $this->assign('userAddress',$address);
         return $this->fetch();
     }
@@ -147,14 +148,12 @@ use think\Db;
       * @throws \think\db\exception\ModelNotFoundException
       * @throws \think\exception\DbException
       */
-     public function getAddress(){
-         $user = Session::get('user');
-         $user = isset($user[0])?$user[0]:$user;
-         $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
-         if(!$address){
-             return $this->returnJson('您没有设置地址');
-         }
-         return $this->returnJson('成功',1001,true,$address);
+     public function addressList(){
+        $user = Session::get('user');
+        $user = isset($user[0])?$user[0]:$user;
+        $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
+        $this->assign('address',$address);
+        return $this->fetch();
      }
 
  }

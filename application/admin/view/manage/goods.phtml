@@ -1,0 +1,38 @@
+{include file="../application/index/view/public/header.phtml" /}
+  {include file="../application/index/view/public/admin-side.phtml" /}
+    {include file="../application/index/view/public/admin-nav.phtml" /}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="row x_title">
+          <div class="col-md-12">
+            <h3>置换请求列表</h3>
+          </div>
+        </div>
+
+        <div class="x_content">
+          <div class="text-muted font-13 m-b-30">
+            <div class="dataTables_wrapper dt-bootstrap no-footer">
+              <div class="row">
+                <div class="col-sm-12">
+                  <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
+                      <tr>
+                        <th>管理员姓名</th>
+                        <th>登录密码(加密)</th>
+                        <th>上次登录时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                     
+                    </tbody>
+                  </table>
+                  {include file="../application/index/view/public/pager.phtml" /}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{include file="../application/index/view/public/footer.phtml" /}
