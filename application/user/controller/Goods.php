@@ -63,7 +63,7 @@ use ku\Upload;
         $data['user_id'] = $user['id'];
         $data['status'] = 1;
         $res = Db::name('goods')->insert($data);
-        if($res){
+        if(!$res){
             return $this->returnJson('失败');
         }
         return $this->returnJson('成功',1001,true);
@@ -87,7 +87,7 @@ use ku\Upload;
             return $this->returnJson('名称，描述，意向商品，图片不能空');
         }
         $res = Db::name('goods')->update($goods);
-        if($res){
+        if(!$res){
             return $this->returnJson('失败');
         }
         return $this->returnJson('成功',1001,true);
