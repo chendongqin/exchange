@@ -40,7 +40,6 @@ use think\Db;
         }
         $pager['data'] = $data;
         $this->assign('pager',$pager);
-        var_dump($pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();

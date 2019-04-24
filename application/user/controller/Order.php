@@ -112,7 +112,7 @@ use think\Db;
         if($status != $status){
             $where['status']=$status;
         }
-        $pager = Db::name('order')
+        $pager = Db::name('goods')
             ->where($where)
             ->paginate($pageLimit,false,array('page'=>$page))
             ->toArray();

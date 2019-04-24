@@ -53,7 +53,6 @@ class Manage extends Adminbase
         }
         $goods = Db::name('goods')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
         $this->assign('pager',$goods);
-        var_dump($goods);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();
@@ -84,6 +83,7 @@ class Manage extends Adminbase
         return $this->returnJson('失败');
     }
 
+    //举报列表
     public function report(){
         $type = $this->getParam('type',100,'int');
         $userId = $this->getParam('userId',0,'int');
