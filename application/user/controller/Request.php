@@ -13,7 +13,7 @@ use think\Db;
 
  class Request extends Userbase {
 
-    //用户基本信息
+    //用户置换请求信息
     public function index()
     {
         $user = Session::get('user');
@@ -29,7 +29,7 @@ use think\Db;
         if($status != $status){
             $where['status']=$status;
         }
-        $pager = Db::name('order')
+        $pager = Db::name('request')
             ->where($where)
             ->paginate($pageLimit,false,array('page'=>$page))
             ->toArray();
@@ -40,7 +40,6 @@ use think\Db;
         }
         $pager['data'] = $data;
         $this->assign('pager',$pager);
-        var_dump($pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();
