@@ -139,13 +139,14 @@ use think\Db;
         $this->assign('goods',$goods);
         $request = Db::name('request')->where('goods_id',$goodsId)->select();
         foreach ($request as $key=>$value){
-            $request[$key]['status'] = $this->goodsStatus($value['status']);
+            $request[$key]['status'] = $this->goodsStatus[$value['status']];
             $user = Db::name('users')->where('id',$value['user_id'])->find();
             $request[$key]['userName'] = empty($user['nick_name'])?$user['email']:$user['nick_name'];
         }
         $this->assign('request',$request);
         return $this->fetch();
     }
+
 
     //匹配成功
     public function add(){
