@@ -40,6 +40,7 @@ use think\Db;
         }
         $pager['data'] = $data;
         $this->assign('pager',$pager);
+        var_dump($pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();
@@ -59,7 +60,7 @@ use think\Db;
         $changeGoodsName = $this->getParam('changeName');
         $changeGoodsDesc = $this->getParam('changeDescribe');
         if(!empty($changeGoodsId)){
-            $changeGoods = Db::name('goods')->where(array('id'=>$goodsId,'status'=>1,'user_id'=>$user['id']))->find();
+            $changeGoods = Db::name('goods')->where(array('id'=>$changeGoodsId,'status'=>1,'user_id'=>$user['id']))->find();
             if(empty($changeGoods))
                 return $this->returnJson('您没有对应置换信息配匹配');
             $changeGoodsName = $changeGoods['name'];
@@ -70,7 +71,7 @@ use think\Db;
         }
         $data = [];
         $data['change_goods_id'] = $changeGoodsId;
-        $data['change_goods_name'] = $changeGoodsId;
+        $data['change_goods_name'] = $changeGoodsName;
         $data['describe'] = $changeGoodsDesc;
         $data['user_id'] = $user['id'];
         $data['goods_id'] = $goodsId;

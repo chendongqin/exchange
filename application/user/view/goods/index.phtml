@@ -22,6 +22,7 @@
                   <table id="datatable" class="table table-striped table-bordered">
                     <thead>
                       <tr>
+                        <th>商品Id</th>
                         <th>商品名称</th>
                         <th>原价格</th>
                         <th>意向商品</th>
@@ -35,6 +36,7 @@
                       <?php if(!empty($pager['data'])):?>
                         <?php foreach ($pager['data'] as $key=>$data):?>
                           <tr role="row">
+                            <td><?php echo $data['id'];?></td>
                             <td><?php echo $data['name'];?></td>
                             <td><?php echo $data['price'];?></td>
                             <td><?php echo $data['want_to_goods'];?></td>

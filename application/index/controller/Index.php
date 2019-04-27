@@ -35,7 +35,7 @@ use think\Db;
          foreach ($pager['data'] as $key=>$item){
              $data[$key] = $item;
              $user = Db::name('users')->where('id',$item['user_id'])->find();
-             $data['userName'] = empty($user['nick_name'])?$user['email']:$user['nick_name'];
+             $data[$key]['userName'] = empty($user['nick_name'])?$user['email']:$user['nick_name'];
          }
          $pager['data'] = $data;
          $this->assign('pager',$pager);
