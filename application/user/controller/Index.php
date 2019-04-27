@@ -148,12 +148,19 @@ use think\Db;
       * @throws \think\db\exception\ModelNotFoundException
       * @throws \think\exception\DbException
       */
-     public function addressList(){
+     public function addresslist(){
         $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
         $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
         $this->assign('address',$address);
         return $this->fetch();
+     }
+
+     public function getAddressList(){
+         $user = Session::get('user');
+         $user = isset($user[0])?$user[0]:$user;
+         $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
+        return $this->returnJson('成功',1001,true,$address);
      }
 
  }
