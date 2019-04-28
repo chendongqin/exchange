@@ -90,7 +90,7 @@ use think\Db;
 //            $requestGoods = Db::name('goods')->where('id',$request['change_goods_id'])->find();
 //            $request['change_goods_name'] = $requestGoods['name'];
 //        }
-        $changer = Db::name('users')->where('id',$request['changer_id'])->find();
+        $changer = Db::name('users')->where('id',$order['changer_id'])->find();
         $this->assign('goods',$goods);
         $this->assign('request',$request);
         $this->assign('changer',$changer);
