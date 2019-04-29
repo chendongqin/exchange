@@ -68,8 +68,9 @@ class Manage extends Adminbase
      * @throws \think\exception\DbException
      * @throws \think\exception\PDOException
      */
-    public function downgoods($id)
+    public function downgoods()
     {
+        $id = $this->getParam('id','','int');
         $where =array('id'=>$id,'status'=>1 ,'isdel'=>0);
         $goods = Db::name('goods')->where($where)->find();
         if(empty($goods)){
@@ -103,6 +104,7 @@ class Manage extends Adminbase
         }
         $pager = Db::name('report')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
         $this->assign('pager',$pager);
+        var_dump($pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();
