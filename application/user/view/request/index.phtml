@@ -5,7 +5,7 @@
       <div class="">
         <div class="row x_title">
           <div class="col-md-12">
-            <h3>地址管理</h3>
+            <h3>置换请求管理</h3>
           </div>
         </div>
 
@@ -13,26 +13,49 @@
           <div class="text-muted font-13 m-b-30">
             <div class="dataTables_wrapper dt-bootstrap no-footer">
               <div class="row">
-                <div class="col-sm-10 col-md-10">
-                  <button class="btn btn-primary btn-sm" id="showAddAddressModal">添加地址</button>
-                </div>
-              </div>
-              <div class="row">
                 <div class="col-sm-12">
                   <table id="datatable" class="table table-striped table-bordered">
                     <thead>
                       <tr>
-                        <th>收件人</th>
-                        <th>手机号</th>
-                        <th>地址</th>
-                        <th>是否为默认地址</th>
+                        <th>置换商品名称</th>
+                        <th>意向商品名称</th>
+                        <th>意向商品原价</th>
+                        <th>意向商品描述</th>
+                        <th>状态</th>
                         <th>操作</th>
                       </tr>
                     </thead>
                     <tbody>
-                      
+                      <?php if(!empty($pager['data'])):?>
+                        <?php foreach ($pager['data'] as $key=>$data):?>
+                          <tr role="row">
+                            <td><?php echo $data['change_goods_name'];?></td>
+                            <td><?php echo $data['goods']['name'];?></td>
+                            <td><?php echo $data['goods']['price'];?></td>
+                            <td><?php echo $data['goods']['describe'];?></td>
+                            <td>
+                              <?php if($data['status'] == 0):?>
+                                <?php echo '待回复' ;?>
+                              <?php elseif($data['status'] == 1):?>
+                                <?php echo '成功' ;?>
+                              <?php else:?>
+                                <?php echo '失败' ;?>
+                              <?php endif;?> 
+                            </td>
+                            <td>
+                              <a class="btn btn-info btn-sm look" href="<?php echo $data['goods']['photo'];?>" target="_blank">查看意向商品图片</a>
+                              <button class="btn btn-danger btn-sm cancel" data-id="<?php echo $data['id'];?>">取消置换请求</button>
+                            </td>
+                          </tr>
+                        <?php endforeach;?>
+                      <?php else:?>
+                        <td colspan="6" style="text-align: center;">暂无信息</td>
+                      <?php endif;?>
                     </tbody>
                   </table>
+                  <?php if(!empty($pager['data'])):?>
+                    {include file="../application/index/view/public/pager.phtml" /}
+                  <?php endif;?>
                 </div>
               </div>
             </div>
@@ -40,155 +63,23 @@
         </div>
       </div>
     </div>
-
-    <div class="modal fade bs-example-modal-md" id="addAddressModal">
-      <div class="modal-dialog modal-md">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title">添加地址</h4>
-          </div>
-          <div class="modal-body open-user-modal">
-            <form class="form-horizontal form-label-left" id="addAddressForm">
-              <div class="form-group">
-                  <label class="control-label col-sm-3" for="addressee">收件人</label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input name="addressee" type="text" class="form-control" placeholder="请输入收件人">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label col-sm-3" for="mobile">手机号</label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input name="mobile" type="number" class="form-control" placeholder="请输入手机号">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label col-sm-3" for="address">地址</label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input name="address" type="text" class="form-control" placeholder="请输入地址">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="isDefault" class="col-sm-3 control-label">设为默认地址</label>
-                  <div class="col-sm-9">
-                      <label class="radio-inline">
-                        <input type="radio" name="isDefault" value="0" checked>是
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" name="isDefault" value="1">否
-                      </label>
-                  </div>
-                </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="addAddress">添加</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade bs-example-modal-md" id="editAddressModal">
-      <div class="modal-dialog modal-md">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title">修改地址</h4>
-          </div>
-          <div class="modal-body open-user-modal">
-            <form class="form-horizontal form-label-left" id="editAddressForm">
-              <input name="id" type="hidden" class="form-control" id="id">
-              <div class="form-group">
-                  <label class="control-label col-sm-3" for="addressee">收件人</label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input name="addressee" type="text" class="form-control" placeholder="请输入收件人" id="addressee">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label col-sm-3" for="mobile">手机号</label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input name="mobile" type="number" class="form-control" placeholder="请输入手机号" id="mobile">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="control-label col-sm-3" for="address">地址</label>
-                  <div class="col-md-6 col-sm-6 col-xs-12">
-                    <input name="address" type="text" class="form-control" placeholder="请输入地址" id="address">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="isDefault" class="col-sm-3 control-label">设为默认地址</label>
-                  <div class="col-sm-9">
-                    <label class="radio-inline">
-                      <input type="radio" name="isDefault" value="0" id="radio0">是
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="isDefault" value="1" id="radio1">否
-                    </label>
-                  </div>
-                </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="editAddress">修改</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <script>
-      (() => {
-        // 添加地址
-        $('#showAddAddressModal').click(() => {
-          $('#addAddressModal').modal('show');
-        });
-        $('#addAddress').click(() => {
-          const params = $('#addAddressForm').serializeArray();
-          $.post('/user/index/addAddress', params, (res) => {
-            if (res.status === true) {
-              location.reload();
-            } else {
-              alert(res.msg);
-            }
-          })
-        });
-        // 修改地址
-        $('.edit').click(function() {
-          const arr = $(this).attr('data-info').split(',');
-          $('#id').val(arr[0]);
-          $('#addressee').val(arr[5]);
-          $('#mobile').val(arr[6]);
-          $('#address').val(arr[1]);
-          $('#radio' + arr[3]).attr("checked","checked");
-          $('#editAddressModal').modal('show');
-        });
-        $('#editAddress').click(() => {
-          const params = $('#editAddressForm').serializeArray();
-          $.post('/user/index/updateAddress', params, (res) => {
-            if (res.status === true) {
-              location.reload();
-            } else {
-              alert(res.msg);
-            }
-          })
-        });
-        // 删除地址
-        $('.delete').click(function() {
-          if (confirm('确定删除该地址？')) {
+      (() => (
+        // 取消置换请求
+        $('.cancel').click(function() {
+          if (confirm('确定取消该置换请求？')) {
             const params = {
               id: $(this).attr('data-id')
             }
-            $.post('/user/index/delAddress', params, (res) => {
-              if (res.status === true) {
+            $.post('/user/request/cancel', params, (res) => {
+            if (res.status === true) {
                 location.reload();
               } else {
                 alert(res.msg);
               }
-            })
+            });
           }
-        });
-      })();
+        })
+      ))();
     </script>
 {include file="../application/index/view/public/footer.phtml" /}
