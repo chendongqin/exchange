@@ -26,7 +26,7 @@ class Order extends Userbase
         $page = $this->getParam('page', 1, 'int');
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
-        $where = '(changer_id='.$user['id'].' or user_id='.$user['id'].')';
+        $where =  ['user_id'=>$user['id']];
         $pager = Db::name('order')
             ->where($where)
             ->paginate($pageLimit, false, array('page' => $page))
