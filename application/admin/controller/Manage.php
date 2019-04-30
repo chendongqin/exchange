@@ -104,7 +104,6 @@ class Manage extends Adminbase
         }
         $pager = Db::name('report')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
         $this->assign('pager',$pager);
-        var_dump($pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         return $this->fetch();
@@ -134,7 +133,7 @@ class Manage extends Adminbase
     }
 
     public function userlist(){
-        $isEffect = $this->getParam('isEffect',0,'int');
+        $isEffect = $this->getParam('isEffect',1,'int');
         $name = $this->getParam('name','','string');
         $pageLimit = $this->getParam('pageLimit',15,'int');
         $page = $this->getParam('page','','int');
