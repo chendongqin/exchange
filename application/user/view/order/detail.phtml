@@ -1,11 +1,11 @@
 {include file="../application/index/view/public/header.phtml" /}
-  {include file="../application/index/view/public/admin-side.phtml" /}
-    {include file="../application/index/view/public/admin-nav.phtml" /}
+  {include file="../application/index/view/public/user-side.phtml" /}
+    {include file="../application/index/view/public/user-nav.phtml" /}
     <div class="right_col" role="main">
       <div class="">
         <div class="row x_title">
           <div class="col-md-12">
-            <h3>举报管理</h3>
+            <h3>订单详情</h3>
           </div>
         </div>
 
@@ -17,15 +17,15 @@
                   <table id="datatable" class="table table-striped table-bordered">
                     <thead>
                       <tr>
-                        <th>商品名称</th>
-                        <th>原价格</th>
-                        <th>意向商品</th>
-                        <th>描述</th>
-                        <th>商品状态</th>
+                        <th>待置换用户</th>
+                        <th>待置换商品</th>
+                        <th>我的置换商品</th>
+                        <th>状态</th>
                         <th>操作</th>
                       </tr>
                     </thead>
                     <tbody>
+                      
                     </tbody>
                   </table>
                   <?php if(!empty($pager['data'])):?>
@@ -40,7 +40,5 @@
     </div>
 
     <script>
-      (() => {
-      })();
     </script>
 {include file="../application/index/view/public/footer.phtml" /}

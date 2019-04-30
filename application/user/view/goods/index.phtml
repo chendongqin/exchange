@@ -41,16 +41,25 @@
                             <td><?php echo $data['price'];?></td>
                             <td><?php echo $data['want_to_goods'];?></td>
                             <td><?php echo $data['describe'];?></td>
-                            <td><?php echo $data['status'] == 0 ? '待发布' : $data['status'] == 1 ? '发布中' : '已匹配';?></td>
+                            <td>
+                              <?php if($data['status'] == 0):?>
+                                <?php echo '待发布' ;?>
+                              <?php elseif($data['status'] == 1):?>
+                                <?php echo '发布中' ;?>
+                              <?php else:?>
+                                <?php echo '已匹配' ;?>
+                              <?php endif;?>
+                            </td>
                             <td><?php echo $data['requestNum'];?></td>
                             <td>
                               <a class="btn btn-info btn-sm look" href="<?php echo $data['photo'];?>" target="_blank">查看图片</a>
+                              <a class="btn btn-info btn-sm look" href="/user/order/goodsdetail?id=<?php echo $data['id'];?>" target="_blank">置换请求列表</a>
                               <button class="btn btn-info btn-sm edit" data-info="<?php echo implode(',', $data);?>">修改</button>
                             </td>
                           </tr>
                         <?php endforeach;?>
                       <?php else:?>
-                        <td colspan="6" style="text-align: center;">暂无信息</td>
+                        <td colspan="8" style="text-align: center;">暂无信息</td>
                       <?php endif;?>
                     </tbody>
                   </table>

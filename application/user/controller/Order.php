@@ -32,9 +32,10 @@ class Order extends Userbase
             ->paginate($pageLimit, false, array('page' => $page))
             ->toArray();
         $data = [];
-        foreach ($pager['data'] as $key => $item) {
-            $goods = Db::name('goods')->where('id', $item['goods_id'])->find();
-            $request = Db::name('request')->where('id', $item['request_id'])->find();
+        foreach ($pager['data'] as $key =>$item){
+            $goods = Db::name('goods')->where('id',$item['goods_id'])->find();
+            $request = Db::name('request')->where('id',$item['request_id'])->find();
+            $data[$key]['id'] = $item['id'];
             $data[$key]['status'] = $this->orderStatus[$item['status']];
             $changer = Db::name('users')->where('id', $item['changer_id'])->find();
             $data[$key]['changer'] = empty($changer['nick_name']) ? $changer['email'] : $changer['nick_name'];
@@ -48,39 +49,42 @@ class Order extends Userbase
         return $this->fetch();
     }
 
-    //用户请求匹配成功订单列表
-    public function pipei()
-    {
-        $pageLimit = $this->getParam('pageLimit', 10, 'int');
-        $page = $this->getParam('page', 1, 'int');
-        $user = Session::get('user');
-        $user = isset($user[0]) ? $user[0] : $user;
-        $where = array('changer_id' => $user['id']);
-        $pager = Db::name('order')
-            ->where($where)
-            ->paginate($pageLimit, false, array('page' => $page))
-            ->toArray();
-        $data = [];
-        foreach ($pager['data'] as $key => $item) {
-            $goods = Db::name('goods')->where('id', $item['goods_id'])->find();
-            $request = Db::name('request')->where('id', $item['request_id'])->find();
-            $data[$key]['status'] = $this->orderStatus[$item['status']];
-            $changer = Db::name('users')->where('id', $item['user_id'])->find();
-            $data[$key]['goodsUser'] = empty($changer['nick_name']) ? $changer['email'] : $changer['nick_name'];
-            $data[$key]['goodsName'] = $goods['name'];
-            $data[$key]['changeGoodsName'] = $request['change_goods_name'];
-        }
-        $pager['data'] = $data;
-        $this->assign('pager', $pager);
-        $this->assign('pageLimit', $pageLimit);
-        $this->assign('page', $page);
-        return $this->fetch();
-    }
+     //用户请求匹配成功订单列表
+     public function pipei()
+     {
+         $pageLimit = $this->getParam('pageLimit',10,'int');
+         $page = $this->getParam('page',1,'int');
+         $user = Session::get('user');
+         $user = isset($user[0])?$user[0]:$user;
+         $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
+         $where = array('changer_id'=>$user['id']);
+         $pager = Db::name('order')
+             ->where($where)
+             ->paginate($pageLimit,false,array('page'=>$page))
+             ->toArray();
+        
+         $data = [];
+         foreach ($pager['data'] as $key =>$item){
+             $goods = Db::name('goods')->where('id',$item['goods_id'])->find();
+             $request = Db::name('request')->where('id',$item['request_id'])->find();
+             $data[$key]['id'] = $item['id'];
+             $data[$key]['status'] = $this->orderStatus[$item['status']];
+             $changer = Db::name('users')->where('id',$item['user_id'])->find();
+             $data[$key]['goodsUser'] = empty($changer['nick_name'])?$changer['email']:$changer['nick_name'];
+             $data[$key]['goodsName'] = $goods['name'];
+             $data[$key]['changeGoodsName'] = $request['change_goods_name'];
+         }
+         $pager['data'] = $data;
+         $this->assign('address',$address);
+         $this->assign('pager',$pager);
+         $this->assign('pageLimit',$pageLimit);
+         $this->assign('page',$page);
+         return $this->fetch();
+     }
 
 
-    //订单详情
-    public function detail()
-    {
+     //订单详情
+    public function detail(){
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
         $id = $this->getParam('id', 0, 'int');
@@ -137,9 +141,11 @@ class Order extends Userbase
     public function goodsdetail()
     {
         $user = Session::get('user');
-        $user = isset($user[0]) ? $user[0] : $user;
-        $goodsId = $this->getParam('id', '', 'int');
-        if (!$goods = Db::name('goods')->where(array('user_id' => $user['id'], 'id' => $goodsId))->find()) {
+        $user = isset($user[0])?$user[0]:$user;
+        $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
+        $this->assign('address',$address);
+        $goodsId = $this->getParam('id','','int');
+        if(!$goods = Db::name('goods')->where(array('user_id'=>$user['id'],'id'=>$goodsId))->find()){
             throw new Exception('置换商品不存在');
         }
         $this->assign('goods', $goods);
