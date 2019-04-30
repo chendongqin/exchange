@@ -21,8 +21,8 @@ class Manage extends Adminbase
         $fail = Db::name('order')->where(array('status'=>2))->count();
         //用户总数
         //男
-        $man = Db::name('user')->where(array('isdel'=>0,'sex'=>0))->count();
-        $nv = Db::name('user')->where(array('isdel'=>0,'sex'=>1))->count();
+        $man = Db::name('users')->where(array('isdel'=>0,'sex'=>0))->count();
+        $nv = Db::name('users')->where(array('isdel'=>0,'sex'=>1))->count();
         $this->assign('goodsWaitNum',$goodsWaitNum);
         $this->assign('goodsIssueNum',$goodsIssueNum);
         $this->assign('requestWaitNum',$requestWaitNum);
