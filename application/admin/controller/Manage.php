@@ -89,7 +89,7 @@ class Manage extends Adminbase
         $type = $this->getParam('type',100,'int');
         $userId = $this->getParam('userId',0,'int');
         $pageLimit = $this->getParam('pageLimit',15,'int');
-        $isdeal = $this->getParam('isDeal',1,'int');
+        $isdeal = $this->getParam('isDeal',0,'int');
         $page = $this->getParam('page',0,'int');
         $reportUserId = $this->getParam('reportuserId',0,'int');
         $where = ['is_deal'=> $isdeal] ;

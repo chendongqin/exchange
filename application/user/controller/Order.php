@@ -26,7 +26,7 @@ class Order extends Userbase
         $page = $this->getParam('page', 1, 'int');
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
-        $where = array('user_id' => $user['id']);
+        $where = '(changer_id='.$user['id'].' or user_id='.$user['id'].')';
         $pager = Db::name('order')
             ->where($where)
             ->paginate($pageLimit, false, array('page' => $page))
@@ -88,7 +88,7 @@ class Order extends Userbase
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
         $id = $this->getParam('id', 0, 'int');
-        $order = Db::name('order')->where(array('id' => $id, 'user_id' => $user['id']))->find();
+        $order = Db::name('order')->where('id='.$id.' and (changer_id='.$user['id'].' or user_id='.$user['id'].')')->find();
         if (!$order) {
             throw new Exception('没有找到记录');
         }
