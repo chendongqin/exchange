@@ -45,6 +45,38 @@ use think\Db;
         return $this->fetch();
     }
 
+     //用户收到置换请求信息
+     public function pipei()
+     {
+         $user = Session::get('user');
+         $user = isset($user[0])?$user[0]:$user;
+         $name = $this->getParam('name');
+         $status = $this->getParam('status',100,'int');
+         $pageLimit = $this->getParam('pageLimit',10,'int');
+         $page = $this->getParam('page',1,'int');
+         $where = array('changer_id'=>$user['id']);
+         if($name){
+             $where['change_goods_name'] = array('like',$name.'%');
+         }
+         if($status != $status){
+             $where['status']=$status;
+         }
+         $pager = Db::name('request')
+             ->where($where)
+             ->paginate($pageLimit,false,array('page'=>$page))
+             ->toArray();
+         $data = [];
+         foreach ($pager['data'] as $key=>$item){
+             $data[$key] = $item;
+             $data[$key]['goods'] = Db::name('goods')->where('id',$item['goods_id'])->find();
+         }
+         $pager['data'] = $data;
+         $this->assign('pager',$pager);
+         $this->assign('pageLimit',$pageLimit);
+         $this->assign('page',$page);
+         return $this->fetch();
+     }
+
 
     public function add(){
         $user = Session::get('user');
