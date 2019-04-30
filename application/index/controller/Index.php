@@ -56,4 +56,14 @@ use think\Db;
      }
 
 
+     public function is_login()
+     {
+         $user = Session::get('user');
+         $user = isset($user[0])?$user[0]:$user;
+         if(empty($user)){
+             return $this->returnJson('您没有登录');
+         }
+         return $this->returnJson('已登录',1001,true);
+     }
+
  }
