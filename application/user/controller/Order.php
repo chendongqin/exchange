@@ -92,16 +92,55 @@ class Order extends Userbase
         if (!$order) {
             throw new Exception('没有找到记录');
         }
-        $goods = Db::name('goods')->where('id', $order['goods_id'])->find();
+        //获取请求
         $request = Db::name('request')->where('id', $order['request_id'])->find();
-//        if(!empty($request['change_goods_id'])){
-//            $requestGoods = Db::name('goods')->where('id',$request['change_goods_id'])->find();
-//            $request['change_goods_name'] = $requestGoods['name'];
-//        }
-        $changer = Db::name('users')->where('id', $order['changer_id'])->find();
-        $this->assign('goods', $goods);
+        //判断是发起人还是交换人
+        if($user['id'] == $order['user_id']){
+            $goods = Db::name('goods')->where('id', $order['goods_id'])->find();
+            $myGoodsName = $goods['name'];
+            if($request['change_goods_id'] >0){
+                $changeGoods = Db::name('goods')->where('id', $request['change_goods_id'])->find();
+                $changeGoodsName = $changeGoods['name'];
+            }else{
+                $changeGoodsName = $request['change_goods_name'];
+            }
+            $changer = Db::name('users')->where('id', $order['changer_id'])->find();
+        }else{
+            $goods = Db::name('goods')->where('id', $order['goods_id'])->find();
+            $changeGoodsName = $goods['name'];
+            if($request['change_goods_id'] >0){
+                $changeGoods = Db::name('goods')->where('id', $request['change_goods_id'])->find();
+                $myGoodsName = $changeGoods['name'];
+            }else{
+                $myGoodsName = $request['change_goods_name'];
+            }
+            $changer = Db::name('users')->where('id', $order['user_id'])->find();
+        }
+        //我的举报
+        $order['my_report'] = '';
+        $order['my_report_status'] = '';
+        //被举报
+        $order['reported'] = '';
+        $order['reported_status'] = '';
+        //获取举报信息
+        if($order['is_report']>0){
+            $reports = Db::name('report')->where('id',$order['is_report'])->select();
+            foreach ($reports as $report){
+                if($user['id'] == $report['user_id']){
+                    $order['my_report'] = $report['reason'];
+                    $order['my_report_status'] = $report['is_deal'] == 1?'已解决':'未解决';
+                }else{
+                    $order['reported'] = $report['reason'];
+                    $order['reported_status'] = $report['is_deal'] == 1?'已解决':'未解决';
+                }
+            }
+        }
+        $this->assign('myGoods', $myGoodsName);
+        $this->assign('changeGoods', $changeGoodsName);
         $this->assign('request', $request);
         $this->assign('changer', $changer);
+        $this->assign('order', $order);
+        $this->assign('orderStatus', $this->orderStatus);
         return $this->fetch();
     }
 
@@ -251,6 +290,7 @@ class Order extends Userbase
         return $this->returnJson('成功', 1001, true);
     }
 
+    //订单举报
     public function report()
     {
         $user = Session::get('user');
@@ -282,11 +322,21 @@ class Order extends Userbase
             'report_user_id'=>$report_user_id,
             'user_id'=>$user['id'],
         ];
+        Db::startTrans();
         $res = Db::name('report')->insert($data);
-        if($res){
-            return $this->returnJson('举报成功',1001,true);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('失败');
         }
-        return $this->returnJson('失败');
+        $report_id = Db::name('report')->getLastInsID();
+        $order['is_report'] = $report_id;
+        $res = Db::name('order')->update($order);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('失败');
+        }
+        Db::commit();
+        return $this->returnJson('举报成功',1001,true);
     }
 
 }

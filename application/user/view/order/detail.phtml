@@ -17,20 +17,29 @@
                   <table id="datatable" class="table table-striped table-bordered">
                     <thead>
                       <tr>
-                        <th>待置换用户</th>
-                        <th>待置换商品</th>
+                        <th>置换用户（对方）</th>
+                        <th>置换商品（对方）</th>
                         <th>我的置换商品</th>
                         <th>状态</th>
-                        <th>操作</th>
+                        <th>我的反馈</th>
+                        <th>反馈处理情况</th>
+                        <th>对方反馈</th>
+                        <th>对方反馈处理情况</th>
                       </tr>
                     </thead>
                     <tbody>
-                      
+                        <tr role="row">
+                            <td><?php echo empty($changer['nick_name'])?$changer['email']:$changer['nick_name'].'('.$changer['email'].')';?></td>
+                            <td><?php echo $changeGoods;?></td>
+                            <td><?php echo $myGoods;?></td>
+                            <td><?php echo isset($orderStatus[$order['status']])?$orderStatus[$order['status']]:'';?></td>
+                            <td><?php echo $order['my_report'];?></td>
+                            <td><?php echo $order['my_report_status'];?></td>
+                            <td><?php echo $order['reported'];?></td>
+                            <td><?php echo $order['reported_status'];?></td>
+                        </tr>
                     </tbody>
                   </table>
-                  <?php if(!empty($pager['data'])):?>
-                    {include file="../application/index/view/public/pager.phtml" /}
-                  <?php endif;?>
                 </div>
               </div>
             </div>
