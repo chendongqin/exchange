@@ -37,7 +37,7 @@
                                 <button class="btn btn-info btn-sm cancel" data-id="<?php echo $data['id'];?>">取消匹配</button>
                               <?php endif;?>
                               <a href="/user/order/detail?id=<?php echo $data['id'];?>" class="btn btn-info btn-sm">匹配详情</a>
-                              <button class="btn btn-danger btn-sm" dadata-id="<?php echo $data['id'];?>"ta>举报</button>
+                              <button class="btn btn-danger btn-sm showReportModal" data-id="<?php echo $data['id'];?>">举报</button>
                             </td>
                           </tr>
                         <?php endforeach;?>
@@ -56,6 +56,44 @@
         </div>
       </div>
     </div>
+    
+    <!-- 举报 start -->
+    <div class="modal fade bs-example-modal-md" id="reportModal">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">举报</h4>
+          </div>
+          <div class="modal-body open-user-modal">
+            <form class="form-horizontal form-label-left" id="reportForm">
+              <input type="hidden" name="order_id" id="order_id">
+              <div class="form-group">
+                <label for="type" class="col-sm-3 control-label">举报类型</label>
+                <div class="col-sm-3">
+                  <select name="type" class="form-control">
+                    <option value="0" selected="selected">普通</option>
+                    <option value="1">交易举报</option>
+                    <option value="2">信誉举报</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-3" for="reason">举报原因</label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <textarea name="reason" type="text" class="form-control" placeholder="请输入举报原因"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="report">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 举报 end -->
 
     <script>
       // 取消匹配
@@ -73,5 +111,20 @@
           })
         }
       });
+
+      // 举报
+      $('.showReportModal').click(function() {
+          $('#order_id').val($(this).attr('data-id'));
+          $('#reportModal').modal('show');
+        });
+        $('#report').click(() => {
+          const params = $('#reportForm').serializeArray();
+          $.post('/user/order/report', params, (res) => {
+            alert(res.msg);
+            if (res.status === true) {
+              location.reload();
+            }
+          });
+        });
     </script>
 {include file="../application/index/view/public/footer.phtml" /}

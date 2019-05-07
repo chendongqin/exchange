@@ -1,0 +1,64 @@
+{include file="../application/index/view/public/header.phtml" /}
+  {include file="../application/index/view/public/admin-side.phtml" /}
+    {include file="../application/index/view/public/admin-nav.phtml" /}
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="row x_title">
+          <div class="col-md-6">
+            <h3>置换请求数量</h3>
+          </div>
+        </div>
+        <div class="row tile_count">
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>待处理任务</span>
+            <div class="count green"><span id="jobnum" class="tile-num"></span>项</div>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>待审核模板</span>
+            <div class="count green"><span id="tempnum" class="tile-num"></span>个</div>
+          </div>
+        </div>
+
+        <div class="row x_title">
+          <div class="col-md-6">
+            <h3>置换匹配数量</h3>
+          </div>
+        </div>
+        <div class="row tile_count">
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>匹配</span>
+            <div class="count green"><span id="generalSend" class="tile-num"></span>条</div>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>营销短信</span>
+            <div class="count green"><span id="marketSend" class="tile-num"></span>条</div>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>行业短信</span>
+            <div class="count green"><span id="general" class="tile-num"></span>条</div>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>营销短信</span>
+            <div class="count green"><span id="market" class="tile-num"></span>条</div>
+          </div>
+        </div>
+
+        <div class="row x_title">
+          <div class="col-md-6">
+            <h3>用户总数</h3>
+          </div>
+        </div>
+        <div class="row tile_count">
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>男</span>
+            <div class="count green"><span id="jobnum" class="tile-num"></span>人</div>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>女</span>
+            <div class="count green"><span id="tempnum" class="tile-num"></span>人</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{include file="../application/index/view/public/footer.phtml" /}
