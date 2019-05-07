@@ -10,12 +10,12 @@
         </div>
         <div class="row tile_count">
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-comments-o"></i>待处理任务</span>
-            <div class="count green"><span id="jobnum" class="tile-num"></span>项</div>
+            <span class="count_top"><i class="fa fa-comments-o"></i>置换等待数量</span>
+            <div class="count green"><span id="jobnum" class="tile-num"><?php echo $goodsWaitNum ;?></span>条</div>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-comments-o"></i>待审核模板</span>
-            <div class="count green"><span id="tempnum" class="tile-num"></span>个</div>
+            <span class="count_top"><i class="fa fa-comments-o"></i>置换提交数量</span>
+            <div class="count green"><span id="tempnum" class="tile-num"><?php echo $goodsIssueNum ;?></span>条</div>
           </div>
         </div>
 
@@ -23,23 +23,28 @@
           <div class="col-md-6">
             <h3>置换匹配数量</h3>
           </div>
+
         </div>
         <div class="row tile_count">
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-comments-o"></i>匹配</span>
-            <div class="count green"><span id="generalSend" class="tile-num"></span>条</div>
+            <span class="count_top"><i class="fa fa-comments-o"></i>匹配请求等待数量</span>
+            <div class="count green"><span id="generalSend" class="tile-num"><?php echo $requestWaitNum ;?></span>条</div>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-comments-o"></i>营销短信</span>
-            <div class="count green"><span id="marketSend" class="tile-num"></span>条</div>
+            <span class="count_top"><i class="fa fa-comments-o"></i>匹配请求成功数量</span>
+            <div class="count green"><span id="marketSend" class="tile-num"><?php echo $requestSuccessNum ;?></span>条</div>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-comments-o"></i>行业短信</span>
-            <div class="count green"><span id="general" class="tile-num"></span>条</div>
+            <span class="count_top"><i class="fa fa-comments-o"></i>匹配请求失败数量</span>
+            <div class="count green"><span id="general" class="tile-num"><?php echo $requestfailNum ;?></span>条</div>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-            <span class="count_top"><i class="fa fa-comments-o"></i>营销短信</span>
-            <div class="count green"><span id="market" class="tile-num"></span>条</div>
+            <span class="count_top"><i class="fa fa-comments-o"></i>置换匹配成功数量</span>
+            <div class="count green"><span id="market" class="tile-num"><?php echo $success ;?></span>条</div>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+            <span class="count_top"><i class="fa fa-comments-o"></i>取消失败数量</span>
+            <div class="count green"><span id="market" class="tile-num"><?php echo $fail ;?></span>条</div>
           </div>
         </div>
 
@@ -51,11 +56,11 @@
         <div class="row tile_count">
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-comments-o"></i>男</span>
-            <div class="count green"><span id="jobnum" class="tile-num"></span>人</div>
+            <div class="count green"><span id="jobnum" class="tile-num"><?php echo $man ;?></span>人</div>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-comments-o"></i>女</span>
-            <div class="count green"><span id="tempnum" class="tile-num"></span>人</div>
+            <div class="count green"><span id="tempnum" class="tile-num"><?php echo $nv ;?></span>人</div>
           </div>
         </div>
       </div>
