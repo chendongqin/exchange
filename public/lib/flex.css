@@ -1,0 +1,54 @@
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex.center {
+  align-items: center;
+}
+.flex-1 {
+  flex: 1
+}
+
+.flex-2 {
+  flex: 2
+}
+
+.flex-3 {
+  flex: 3
+}
+
+.flex-4 {
+  flex: 4
+}
+
+.flex-5 {
+  flex: 5
+}
+
+.flex-6 {
+  flex: 6
+}
+
+.flex-7 {
+  flex: 7
+}
+
+.flex-8 {
+  flex: 8
+}
+
+.flex-9 {
+  flex: 9
+}
+.shadow {
+  margin: 0 15px 0 0;
+}
+.img-wrapper {
+  margin: auto;
+  width: 200px;
+  height: 200px;
+}
+.img-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+}
