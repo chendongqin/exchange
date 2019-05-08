@@ -41,6 +41,9 @@ class Order extends Userbase
             $data[$key]['changer'] = empty($changer['nick_name']) ? $changer['email'] : $changer['nick_name'];
             $data[$key]['goodsName'] = $goods['name'];
             $data[$key]['changeGoodsName'] = $request['change_goods_name'];
+            $data[$key]['changer_addressee'] = $item['changer_addressee'];
+            $data[$key]['changer_address'] = $item['changer_address'];
+            $data[$key]['changer_mobile'] = $item['changer_mobile'];
         }
         $pager['data'] = $data;
         $this->assign('pager', $pager);
@@ -73,6 +76,9 @@ class Order extends Userbase
              $data[$key]['goodsUser'] = empty($changer['nick_name'])?$changer['email']:$changer['nick_name'];
              $data[$key]['goodsName'] = $goods['name'];
              $data[$key]['changeGoodsName'] = $request['change_goods_name'];
+             $data[$key]['user_addressee'] = $item['user_addressee'];
+             $data[$key]['user_address'] = $item['user_address'];
+             $data[$key]['user_mobile'] = $item['user_mobile'];
          }
          $pager['data'] = $data;
          $this->assign('address',$address);
@@ -190,7 +196,6 @@ class Order extends Userbase
         $this->assign('goods', $goods);
         $request = Db::name('request')->where('goods_id', $goodsId)->select();
         foreach ($request as $key => $value) {
-            $request[$key]['status'] = $this->goodsStatus[$value['status']];
             $user = Db::name('users')->where('id', $value['user_id'])->find();
             $request[$key]['userName'] = empty($user['nick_name']) ? $user['email'] : $user['nick_name'];
         }
@@ -245,6 +250,21 @@ class Order extends Userbase
         Db::commit();
         Db::name('request')->where(array('goods_id' => $goodsId))->update(array('status' => 2));
         return $this->returnJson('成功', 1001, true);
+    }
+
+    //拒绝请求
+    public function refund()
+    {
+        $user = Session::get('user');
+        $user = isset($user[0]) ? $user[0] : $user;
+        $id = $this->getParam('id');
+        $request = Db::name('request')->where(['id'=>$id,'status'=>0,'goods_user_id'=>$user['id']])->find();
+        if(!$request){
+            return $this->returnJson('您没有权力拒绝该请求');
+        }
+        $request['status'] = 2;
+        Db::name('request')->update($request);
+        return $this->returnJson('成功',1001,true);
     }
 
     //匹配成功，请求匹配人填写地址

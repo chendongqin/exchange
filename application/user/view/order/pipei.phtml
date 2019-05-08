@@ -21,6 +21,9 @@
                         <th>待置换商品</th>
                         <th>我的置换商品</th>
                         <th>状态</th>
+                        <th>请求收货人</th>
+                        <th>请求收货地址</th>
+                        <th>请求收货人联系方式</th>
                         <th>操作</th>
                       </tr>
                     </thead>
@@ -32,6 +35,9 @@
                             <td><?php echo $data['goodsName'];?></td>
                             <td><?php echo $data['changeGoodsName'];?></td>
                             <td><?php echo $data['status'];?></td>
+                              <td><?php echo $data['user_addressee'];?></td>
+                              <td><?php echo $data['user_address'];?></td>
+                              <td><?php echo $data['user_mobile'];?></td>
                             <td>
                               <?php if($data['status'] == '处理中'):?>
                                 <button class="btn btn-info btn-sm match" data-id="<?php echo $data['id'];?>">确定匹配</button>

@@ -48,7 +48,8 @@
                             <td>
                                 <?php if($data['status'] == 0):?>
                                     <button class="btn btn-info btn-sm match" data-id="<?php echo $data['id'];?>">确定匹配</button>
-                                <?php endif;?>
+                                    <button class="btn btn-info btn-sm refund" data-id="<?php echo $data['id'];?>">拒绝</button>
+                                <?php endif; ?>
                             </td>
                           </tr>
                         <?php endforeach;?>
@@ -135,6 +136,20 @@
             alert('请先选择地址');
           }
         });
+
+        $(".refund").click(function () {
+            var id = $(this).attr('data-id');
+            if (window.confirm('确定拒绝该请求？')) {
+                $.post('/user/order/refund',{id:id},function (res) {
+                    if (res.status === true) {
+                        location.reload();
+                    } else {
+                        alert(res.msg);
+                    }
+                })
+            }
+        })
+
       })();
     </script>
 {include file="../application/index/view/public/footer.phtml" /}
