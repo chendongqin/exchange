@@ -46,7 +46,9 @@
                               <?php endif;?> 
                             </td>
                             <td>
-                              <button class="btn btn-info btn-sm match" data-id="<?php echo $data['id'];?>">确定匹配</button>
+                                <?php if($data['status'] == 0):?>
+                                    <button class="btn btn-info btn-sm match" data-id="<?php echo $data['id'];?>">确定匹配</button>
+                                <?php endif;?>
                             </td>
                           </tr>
                         <?php endforeach;?>
