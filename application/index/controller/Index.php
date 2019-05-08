@@ -23,7 +23,7 @@ use think\Db;
          $page = $this->getParam('page',1,'int');
          $name = $this->getParam('name');
          $wantToGoods = $this->getParam('wantToGoodsName');
-         $where = array('status'=>1);
+         $where = array('status'=>1,'isdel'=>0);
          if($name)
              $where['name'] = array('like',$name.'%');
          if($wantToGoods)
