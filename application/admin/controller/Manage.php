@@ -92,8 +92,9 @@ class Manage extends Adminbase
         $isdeal = $this->getParam('isDeal',100,'int');
         $page = $this->getParam('page',0,'int');
         $reportUserId = $this->getParam('reportuserId',0,'int');
+        $where = [];
         if($isdeal != 100){
-            $where = ['is_deal'=> $isdeal] ;
+            $where['is_deal'] = $isdeal;
         }
         if($userId){
             $where['user_id'] = $userId;
