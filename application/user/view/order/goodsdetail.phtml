@@ -25,6 +25,7 @@
                         <th>待置换商品名称</th>
                         <th>待置换商品描述</th>
                         <th>待置换用户</th>
+                        <th>待置换用户信誉</th>
                         <th>状态</th>
                         <th>操作</th>
                       </tr>
@@ -36,6 +37,7 @@
                             <td><?php echo $data['change_goods_name'];?></td>
                             <td><?php echo $data['describe'];?></td>
                             <td><?php echo $data['userName'];?></td>
+                            <td><?php echo $data['credit'];?></td>
                             <td>
                               <?php if($data['status'] == 0):?>
                                 <?php echo '待回复' ;?>

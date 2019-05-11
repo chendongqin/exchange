@@ -199,6 +199,7 @@ class Order extends Userbase
         foreach ($request as $key => $value) {
             $user = Db::name('users')->where('id', $value['user_id'])->find();
             $request[$key]['userName'] = empty($user['nick_name']) ? $user['email'] : $user['nick_name'];
+            $request[$key]['credit'] = $user['credit'];
         }
         $this->assign('request', $request);
         return $this->fetch();

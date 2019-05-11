@@ -19,8 +19,8 @@
                       <div class="img-wrapper flex center">
                         <img src="<?php echo $data['photo'];?>" alt="图片丢失">
                       </div>
-                      <p style="margin: 0;color: #666;;"><span>商品发布人：</span><?php echo $data['userName'];?><span style="padding: 0 0 0 20px;">商品名称：</span><?php echo $data['name'];?></p>
-                      <p style="margin: 0;margin-top: 2px;color: #666;"><span>商品原价格：</span><?php echo $data['price'];?><span style="padding: 0 0 0 20px;">意向物品：</span><?php echo $data['want_to_goods'];?></p>
+                        <p style="margin: 0;color: #666;;"><span>商品发布人：</span><?php echo $data['userName'];?>(信誉分：<?php echo $data['credit'];?>)</p><p><span style="padding: 0 0 0 20px;">商品名称：</span><?php echo $data['name'];?></p>
+                        <p style="margin: 0;margin-top: 2px;color: #666;"><span>商品原价格：</span><?php echo $data['price'];?></p><p><span style="padding: 0 0 0 20px;">意向物品：</span><?php echo $data['want_to_goods'];?></p>
                       <div style="margin: 0;margin-top: 2px;color: #666;">
                         <button class="btn btn-info btn-sm view" data-desc="<?php echo $data['describe'];?>">查看详情</button>
                         <button class="btn btn-info btn-sm add" data-id="<?php echo $data['id'];?>" data-name="<?php echo $data['name'];?>">发起置换请求</button>
