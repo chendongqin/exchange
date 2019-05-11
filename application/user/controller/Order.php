@@ -248,7 +248,7 @@ class Order extends Userbase
             return $this->returnJson('失败');
         }
         Db::commit();
-        Db::name('request')->where(array('goods_id' => $goodsId))->update(array('status' => 2));
+        Db::name('request')->where(array('goods_id' => $goodsId))->update(array('status' => 1));
         return $this->returnJson('成功', 1001, true);
     }
 
