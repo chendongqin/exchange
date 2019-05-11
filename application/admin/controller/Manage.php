@@ -144,9 +144,9 @@ class Manage extends Adminbase
             Db::rollback();
             return $this->returnJson('失败');
         }
-        $report_user = Db::name('user')->where('id', $report['report_user_id'])->find();
+        $report_user = Db::name('users')->where('id', $report['report_user_id'])->find();
         $user_credit = $report_user['credit'] > 20 ? 20 : $report_user['credit'];
-        $res = Db::name('user')->where('id',$report['report_user_id'])->setDec('credit',$user_credit);
+        $res = Db::name('users')->where('id',$report['report_user_id'])->setDec('credit',$user_credit);
         if (!$res) {
             Db::rollback();
             return $this->returnJson('失败');

@@ -293,18 +293,18 @@ class Order extends Userbase
             Db::rollback();
             return $this->returnJson('失败');
         }
-        $user = Db::name('user')->where('id', $order['user_id'])->find();
-        $changer = Db::name('user')->where('id', $order['changer_id'])->find();
+        $user = Db::name('users')->where('id', $order['user_id'])->find();
+        $changer = Db::name('users')->where('id', $order['changer_id'])->find();
         $user_credit = 100 - $user['credit'] > 0 ? 100 - $user['credit'] : 0;
         $changer_credit = 100 - $changer['credit'] > 0 ? 100 - $user['credit'] : 0;
         $user_credit = $user_credit > 10 ? 10 : $user_credit;
         $changer_credit = $changer_credit > 10 ? 10 : $changer_credit;
-        $res = Db::name('user')->where('id', $order['user_id'])->setInc('credit', $user_credit);
+        $res = Db::name('users')->where('id', $order['user_id'])->setInc('credit', $user_credit);
         if (!$res) {
             Db::rollback();
             return $this->returnJson('失败');
         }
-        $res = Db::name('user')->where('id', $order['changer_id'])->setInc('credit', $changer_credit);
+        $res = Db::name('users')->where('id', $order['changer_id'])->setInc('credit', $changer_credit);
         if (!$res) {
             Db::rollback();
             return $this->returnJson('失败');

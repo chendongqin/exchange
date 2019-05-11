@@ -49,7 +49,7 @@ use think\Db;
      public function sysmsg(){
          $pageLimit = $this->getParam('pageLimit',10,'int');
          $page = $this->getParam('page',1,'int');
-         $pager = Db::name('system_msg')->order(array('weight'=>'desc','id'=>'desc'))
+         $pager = Db::name('system_msg')->where('issue',1)->order(array('weight'=>'desc','id'=>'desc'))
              ->paginate($pageLimit,false,array('page'=>$page))
              ->toArray();
          $data = $pager['data'];
