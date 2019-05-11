@@ -47,6 +47,7 @@
                             <td>
                               <?php if($data['is_deal'] == 0):?>
                                 <button class="btn btn-info btn-sm handle" data-id="<?php echo $data['id'];?>">处理</button>
+                                <button class="btn btn-info btn-sm handle_del" data-id="<?php echo $data['id'];?>">删除</button>
                               <?php endif;?>
                             </td>
                           </tr>
@@ -75,6 +76,22 @@
             const params = {
               id: $(this).attr('data-id')
             }
+            $.post('/admin/manage/dealreport', params, (res) => {
+              if (res.status === true) {
+                location.reload();
+              } else {
+                alert(res.msg);
+              }
+            })
+          }
+        });
+        //删除处理
+        $('.handle_del').click(function() {
+          if (confirm('确定删除该举报订单？')) {
+            const params = {
+              id: $(this).attr('data-id'),
+              del:1
+            };
             $.post('/admin/manage/dealreport', params, (res) => {
               if (res.status === true) {
                 location.reload();

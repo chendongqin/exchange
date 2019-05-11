@@ -115,6 +115,7 @@ class Manage extends Adminbase
     /**
      * 更新已处理举报
      * @param $id
+     * @param int $del
      * @return \think\response\Json
      * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
@@ -122,17 +123,36 @@ class Manage extends Adminbase
      * @throws \think\exception\DbException
      * @throws \think\exception\PDOException
      */
-    public function dealreport($id){
+    public function dealreport($id , $del = 0){
         $report = Db::name('report')->where(array('id'=>$id,'is_deal'=>0))->find();
         if(!$report){
             return $this->returnJson('没有举报需要处理');
         }
-        $report['is_deal'] = 1;
-        $res = Db::name('report')->update($report);
-        if($res){
-            return $this->returnJson('成功',1001,true);
+        //如果是删除
+        if($del){
+            $res = Db::name('report')->where('id',$id)->delete(true);
+            if(!$res){
+                Db::rollback();
+                return $this->returnJson('失败');
+            }
+            return $this->returnJson('删除成功',1001,true);
         }
-        return $this->returnJson('失败');
+        $report['is_deal'] = 1;
+        Db::startTrans();
+        $res = Db::name('report')->update($report);
+        if(!$res){
+            Db::rollback();
+            return $this->returnJson('失败');
+        }
+        $report_user = Db::name('user')->where('id', $report['report_user_id'])->find();
+        $user_credit = $report_user['credit'] > 20 ? 20 : $report_user['credit'];
+        $res = Db::name('user')->where('id',$report['report_user_id'])->setDec('credit',$user_credit);
+        if (!$res) {
+            Db::rollback();
+            return $this->returnJson('失败');
+        }
+        Db::commit();
+        return $this->returnJson('成功',1001,true);
     }
 
     public function userlist(){

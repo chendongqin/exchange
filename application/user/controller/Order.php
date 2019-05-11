@@ -26,15 +26,15 @@ class Order extends Userbase
         $page = $this->getParam('page', 1, 'int');
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
-        $where =  ['user_id'=>$user['id']];
+        $where = ['user_id' => $user['id']];
         $pager = Db::name('order')
             ->where($where)
             ->paginate($pageLimit, false, array('page' => $page))
             ->toArray();
         $data = [];
-        foreach ($pager['data'] as $key =>$item){
-            $goods = Db::name('goods')->where('id',$item['goods_id'])->find();
-            $request = Db::name('request')->where('id',$item['request_id'])->find();
+        foreach ($pager['data'] as $key => $item) {
+            $goods = Db::name('goods')->where('id', $item['goods_id'])->find();
+            $request = Db::name('request')->where('id', $item['request_id'])->find();
             $data[$key]['id'] = $item['id'];
             $data[$key]['status'] = $this->orderStatus[$item['status']];
             $changer = Db::name('users')->where('id', $item['changer_id'])->find();
@@ -52,72 +52,73 @@ class Order extends Userbase
         return $this->fetch();
     }
 
-     //用户请求匹配成功订单列表
-     public function pipei()
-     {
-         $pageLimit = $this->getParam('pageLimit',10,'int');
-         $page = $this->getParam('page',1,'int');
-         $user = Session::get('user');
-         $user = isset($user[0])?$user[0]:$user;
-         $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
-         $where = array('changer_id'=>$user['id']);
-         $pager = Db::name('order')
-             ->where($where)
-             ->paginate($pageLimit,false,array('page'=>$page))
-             ->toArray();
-        
-         $data = [];
-         foreach ($pager['data'] as $key =>$item){
-             $goods = Db::name('goods')->where('id',$item['goods_id'])->find();
-             $request = Db::name('request')->where('id',$item['request_id'])->find();
-             $data[$key]['id'] = $item['id'];
-             $data[$key]['status'] = $this->orderStatus[$item['status']];
-             $changer = Db::name('users')->where('id',$item['user_id'])->find();
-             $data[$key]['goodsUser'] = empty($changer['nick_name'])?$changer['email']:$changer['nick_name'];
-             $data[$key]['goodsName'] = $goods['name'];
-             $data[$key]['changeGoodsName'] = $request['change_goods_name'];
-             $data[$key]['user_addressee'] = $item['user_addressee'];
-             $data[$key]['user_address'] = $item['user_address'];
-             $data[$key]['user_mobile'] = $item['user_mobile'];
-         }
-         $pager['data'] = $data;
-         $this->assign('address',$address);
-         $this->assign('pager',$pager);
-         $this->assign('pageLimit',$pageLimit);
-         $this->assign('page',$page);
-         return $this->fetch();
-     }
+    //用户请求匹配成功订单列表
+    public function pipei()
+    {
+        $pageLimit = $this->getParam('pageLimit', 10, 'int');
+        $page = $this->getParam('page', 1, 'int');
+        $user = Session::get('user');
+        $user = isset($user[0]) ? $user[0] : $user;
+        $address = Db::name('user_address')->where(array('user_id' => $user['id'], 'isdel' => 0))->order('is_default', 'desc')->select();
+        $where = array('changer_id' => $user['id']);
+        $pager = Db::name('order')
+            ->where($where)
+            ->paginate($pageLimit, false, array('page' => $page))
+            ->toArray();
+
+        $data = [];
+        foreach ($pager['data'] as $key => $item) {
+            $goods = Db::name('goods')->where('id', $item['goods_id'])->find();
+            $request = Db::name('request')->where('id', $item['request_id'])->find();
+            $data[$key]['id'] = $item['id'];
+            $data[$key]['status'] = $this->orderStatus[$item['status']];
+            $changer = Db::name('users')->where('id', $item['user_id'])->find();
+            $data[$key]['goodsUser'] = empty($changer['nick_name']) ? $changer['email'] : $changer['nick_name'];
+            $data[$key]['goodsName'] = $goods['name'];
+            $data[$key]['changeGoodsName'] = $request['change_goods_name'];
+            $data[$key]['user_addressee'] = $item['user_addressee'];
+            $data[$key]['user_address'] = $item['user_address'];
+            $data[$key]['user_mobile'] = $item['user_mobile'];
+        }
+        $pager['data'] = $data;
+        $this->assign('address', $address);
+        $this->assign('pager', $pager);
+        $this->assign('pageLimit', $pageLimit);
+        $this->assign('page', $page);
+        return $this->fetch();
+    }
 
 
-     //订单详情
-    public function detail(){
+    //订单详情
+    public function detail()
+    {
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
         $id = $this->getParam('id', 0, 'int');
-        $order = Db::name('order')->where('id='.$id.' and (changer_id='.$user['id'].' or user_id='.$user['id'].')')->find();
+        $order = Db::name('order')->where('id=' . $id . ' and (changer_id=' . $user['id'] . ' or user_id=' . $user['id'] . ')')->find();
         if (!$order) {
             throw new Exception('没有找到记录');
         }
         //获取请求
         $request = Db::name('request')->where('id', $order['request_id'])->find();
         //判断是发起人还是交换人
-        if($user['id'] == $order['user_id']){
+        if ($user['id'] == $order['user_id']) {
             $goods = Db::name('goods')->where('id', $order['goods_id'])->find();
             $myGoodsName = $goods['name'];
-            if($request['change_goods_id'] >0){
+            if ($request['change_goods_id'] > 0) {
                 $changeGoods = Db::name('goods')->where('id', $request['change_goods_id'])->find();
                 $changeGoodsName = $changeGoods['name'];
-            }else{
+            } else {
                 $changeGoodsName = $request['change_goods_name'];
             }
             $changer = Db::name('users')->where('id', $order['changer_id'])->find();
-        }else{
+        } else {
             $goods = Db::name('goods')->where('id', $order['goods_id'])->find();
             $changeGoodsName = $goods['name'];
-            if($request['change_goods_id'] >0){
+            if ($request['change_goods_id'] > 0) {
                 $changeGoods = Db::name('goods')->where('id', $request['change_goods_id'])->find();
                 $myGoodsName = $changeGoods['name'];
-            }else{
+            } else {
                 $myGoodsName = $request['change_goods_name'];
             }
             $changer = Db::name('users')->where('id', $order['user_id'])->find();
@@ -129,15 +130,15 @@ class Order extends Userbase
         $order['reported'] = '';
         $order['reported_status'] = '';
         //获取举报信息
-        if($order['is_report']>0){
-            $reports = Db::name('report')->where('id',$order['is_report'])->select();
-            foreach ($reports as $report){
-                if($user['id'] == $report['user_id']){
+        if ($order['is_report'] > 0) {
+            $reports = Db::name('report')->where('id', $order['is_report'])->select();
+            foreach ($reports as $report) {
+                if ($user['id'] == $report['user_id']) {
                     $order['my_report'] = $report['reason'];
-                    $order['my_report_status'] = $report['is_deal'] == 1?'已解决':'未解决';
-                }else{
+                    $order['my_report_status'] = $report['is_deal'] == 1 ? '已解决' : '未解决';
+                } else {
                     $order['reported'] = $report['reason'];
-                    $order['reported_status'] = $report['is_deal'] == 1?'已解决':'未解决';
+                    $order['reported_status'] = $report['is_deal'] == 1 ? '已解决' : '未解决';
                 }
             }
         }
@@ -186,11 +187,11 @@ class Order extends Userbase
     public function goodsdetail()
     {
         $user = Session::get('user');
-        $user = isset($user[0])?$user[0]:$user;
-        $address = Db::name('user_address')->where(array('user_id'=>$user['id'],'isdel'=>0))->order('is_default','desc')->select();
-        $this->assign('address',$address);
-        $goodsId = $this->getParam('id','','int');
-        if(!$goods = Db::name('goods')->where(array('user_id'=>$user['id'],'id'=>$goodsId))->find()){
+        $user = isset($user[0]) ? $user[0] : $user;
+        $address = Db::name('user_address')->where(array('user_id' => $user['id'], 'isdel' => 0))->order('is_default', 'desc')->select();
+        $this->assign('address', $address);
+        $goodsId = $this->getParam('id', '', 'int');
+        if (!$goods = Db::name('goods')->where(array('user_id' => $user['id'], 'id' => $goodsId))->find()) {
             throw new Exception('置换商品不存在');
         }
         $this->assign('goods', $goods);
@@ -259,13 +260,13 @@ class Order extends Userbase
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
         $id = $this->getParam('id');
-        $request = Db::name('request')->where(['id'=>$id,'status'=>0,'goods_user_id'=>$user['id']])->find();
-        if(!$request){
+        $request = Db::name('request')->where(['id' => $id, 'status' => 0, 'goods_user_id' => $user['id']])->find();
+        if (!$request) {
             return $this->returnJson('您没有权力拒绝该请求');
         }
         $request['status'] = 2;
         Db::name('request')->update($request);
-        return $this->returnJson('成功',1001,true);
+        return $this->returnJson('成功', 1001, true);
     }
 
     //匹配成功，请求匹配人填写地址
@@ -285,9 +286,29 @@ class Order extends Userbase
         $order['changer_addressee'] = $userAddressee;
         $order['changer_mobile'] = $addressMobile;
         $order['status'] = 1;
+        Db::startTrans();
         $res = Db::name('order')->update($order);
-        if (!$res)
+        if (!$res) {
+            Db::rollback();
             return $this->returnJson('失败');
+        }
+        $user = Db::name('user')->where('id', $order['user_id'])->find();
+        $changer = Db::name('user')->where('id', $order['changer_id'])->find();
+        $user_credit = 100 - $user['credit'] > 0 ? 100 - $user['credit'] : 0;
+        $changer_credit = 100 - $changer['credit'] > 0 ? 100 - $user['credit'] : 0;
+        $user_credit = $user_credit > 10 ? 10 : $user_credit;
+        $changer_credit = $changer_credit > 10 ? 10 : $changer_credit;
+        $res = Db::name('user')->where('id', $order['user_id'])->setInc('credit', $user_credit);
+        if (!$res) {
+            Db::rollback();
+            return $this->returnJson('失败');
+        }
+        $res = Db::name('user')->where('id', $order['changer_id'])->setInc('credit', $changer_credit);
+        if (!$res) {
+            Db::rollback();
+            return $this->returnJson('失败');
+        }
+        Db::commit();
         return $this->returnJson('成功', 1001, true);
     }
 
@@ -316,48 +337,48 @@ class Order extends Userbase
     {
         $user = Session::get('user');
         $user = isset($user[0]) ? $user[0] : $user;
-        $order_id = $this->getParam('order_id',0,'int');
-        $order = Db::name('order',['id'=>$order_id,'status'=>1])->find();
-        if(empty($order)){
+        $order_id = $this->getParam('order_id', 0, 'int');
+        $order = Db::name('order', ['id' => $order_id, 'status' => 1])->find();
+        if (empty($order)) {
             return $this->returnJson('米有该订单');
         }
-        if($user['id'] == $order['user_id']){
+        if ($user['id'] == $order['user_id']) {
             $report_user_id = $order['changer_id'];
-        }elseif($user['id'] == $order['changer_id']){
+        } elseif ($user['id'] == $order['changer_id']) {
             $report_user_id = $order['user_id'];
-        }else{
+        } else {
             return $this->returnJson('您没有权限');
         }
         $reason = $this->getParam('reason');
-        $type = $this->getParam('type',0,'int');
-        if($type >2 or $type<0){
+        $type = $this->getParam('type', 0, 'int');
+        if ($type > 2 or $type < 0) {
             return $this->returnJson('举报类型错误');
         }
-        if(empty($reason)){
+        if (empty($reason)) {
             return $this->returnJson('举报类型不能为空');
         }
         $data = [
-            'reason'=>$reason,
-            'order_id'=>$order_id,
-            'type'=>$type,
-            'report_user_id'=>$report_user_id,
-            'user_id'=>$user['id'],
+            'reason'         => $reason,
+            'order_id'       => $order_id,
+            'type'           => $type,
+            'report_user_id' => $report_user_id,
+            'user_id'        => $user['id'],
         ];
         Db::startTrans();
         $res = Db::name('report')->insert($data);
-        if(!$res){
+        if (!$res) {
             Db::rollback();
             return $this->returnJson('失败');
         }
         $report_id = Db::name('report')->getLastInsID();
         $order['is_report'] = $report_id;
         $res = Db::name('order')->update($order);
-        if(!$res){
+        if (!$res) {
             Db::rollback();
             return $this->returnJson('失败');
         }
         Db::commit();
-        return $this->returnJson('举报成功',1001,true);
+        return $this->returnJson('举报成功', 1001, true);
     }
 
 }
